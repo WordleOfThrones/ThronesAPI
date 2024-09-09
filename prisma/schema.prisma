@@ -1,0 +1,64 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("SUPABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Usuario {
+  userId      Int      @id @default(autoincrement())
+  nameUser    String   @db.VarChar(100)
+  nickname    String   @db.VarChar(30)
+  email       String   @unique @db.VarChar(100)
+  password    String   @db.VarChar(50)
+  lastLogin   DateTime?
+  recorde     Float?
+  isAdmin     Boolean  @default(false)
+  jogos       Jogos[]
+}
+
+model Personagem {
+  idPersonagem     Int      @id @default(autoincrement())
+  nome             String   @db.VarChar(45)
+  descricao        String   @db.VarChar(2000)
+  casa             String   @db.VarChar(100)
+  genero           String   @db.Char(1)
+  raca             String   @db.VarChar(45)
+  titulo           String   @db.VarChar(500)
+  origem           String   @db.VarChar(100)
+  religiao         String   @db.VarChar(100)
+  serie            String   @db.VarChar(45)
+  primeiraAparicao String   @db.VarChar(100)
+  imagem           String   @db.VarChar(200)
+  datas            Data[]
+}
+
+model Jogos {
+  idJogo        Int      @id @default(autoincrement())
+  idUser        Int
+  dataJogo      DateTime
+  qtdTentativas Int
+  tempo         Float
+  pontuacaoDia  Decimal    @db.Decimal(10, 2)
+  usuario       Usuario  @relation(fields: [idUser], references: [userId])
+  datas         Data[] 
+}
+
+model ModoJogo {
+  idModo       Int      @id @default(autoincrement())
+  nomeModo     String   @db.VarChar(45)
+  data         Data[] 
+}
+
+model Data {
+  idData         Int      @id @default(autoincrement())
+  idModoJogo     Int
+  idPersonagem   Int
+  idJogo         Int  
+  data           DateTime @db.Date
+  modoJogo       ModoJogo @relation(fields: [idModoJogo], references: [idModo])
+  personagem     Personagem @relation(fields: [idPersonagem], references: [idPersonagem])
+  jogo           Jogos @relation(fields: [idJogo], references: [idJogo]) 
+}
