@@ -12,10 +12,10 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-    const { id } = req.params; // Pega o id da URL
+    const { id } = req.params;
 
     try {
-        const user = await prisma.usuario.findUnique({
+        const user = await prisma.usuarios.findUnique({
             where: { userId: Number(id) },
         });
 
