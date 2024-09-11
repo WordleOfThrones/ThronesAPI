@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { bucket } from '../utils/db'; // Assumindo que isso vem da inicialização do Firebase Storage
-import { prisma } from '../utils/prismaClient'; // Certifique-se de que o Prisma está configurado corretamente
+import { bucket } from '../utils/db';
+import { prisma } from '../utils/prismaClient';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 
@@ -33,42 +33,28 @@ export const uploadCharacter = (req: Request, res: Response) => {
       });
 
       blobStream.on('error', (error) => {
-        return res.status(500).json({ message: 'Erro ao fazer upload', error });
+        return res.status(500).json({ message: 'Erro ao fazer upload do arquivo', error });
       });
 
       blobStream.on('finish', async () => {
         const publicUrl = `https://storage.googleapis.com/${bucket.name}/${newFileName}`;
 
         try {
-          console.log({
-            nome,
-            descricao,
-            casa,
-            genero,
-            raca,
-            titulo,
-            origem,
-            religiao,
-            serie,
-            primeiraAparicao,
-            imagem: publicUrl
+          const personagem = await prisma.personagens.create({
+            data: {
+              nome,
+              descricao,
+              casa,
+              genero,
+              raca,
+              titulo,
+              origem,
+              religiao,
+              serie,
+              primeiraAparicao,
+              imagem: publicUrl,
+            },
           });
-
-            const personagem = await prisma.personagens.create({
-              data: {
-                nome,
-                descricao,
-                casa,
-                genero,
-                raca,
-                titulo,
-                origem,
-                religiao,
-                serie,
-                primeiraAparicao,
-                imagem: publicUrl,
-              },
-            });
 
           return res.status(201).json({
             message: 'Personagem adicionado com sucesso!',
@@ -76,13 +62,14 @@ export const uploadCharacter = (req: Request, res: Response) => {
           });
 
         } catch (dbError) {
-            return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados', error: dbError });
+          return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados', error: dbError });
         }
       });
 
       blobStream.end(file.buffer);
+
     } catch (error) {
-        return res.status(500).json({ message: 'Erro ao fazer upload', error });
+      return res.status(500).json({ message: 'Erro ao fazer upload', error });
     }
   });
 };
