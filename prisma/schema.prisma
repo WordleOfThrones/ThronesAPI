@@ -10,7 +10,7 @@ generator client {
 model Usuarios {
   userId      Int      @id @default(autoincrement())
   nameUser    String   @db.VarChar(100)
-  nickname    String   @db.VarChar(30)
+  nickname    String   @unique @db.VarChar(30)
   email       String   @unique @db.VarChar(100)
   password    String   @db.VarChar(255)
   lastLogin   DateTime?
@@ -33,6 +33,7 @@ model Personagens {
   serie            String   @db.VarChar(45)
   primeiraAparicao String   @db.VarChar(11)
   imagem           String   @db.VarChar(300)
+  imagemAdvinhacao String   @db.VarChar(300)
   datas            Datas[] 
 }
 
@@ -43,9 +44,9 @@ model Jogos {
   qtdTentativas Int
   tempo         Int      
   status        Int      @default(0)
-  pontuacaoDia  Decimal   @db.Decimal(10, 2)
+  pontuacaoDia  Decimal  @db.Decimal(10, 2)
   datas         Datas[] 
-  usuario       Usuarios  @relation(fields: [idUser], references: [userId])
+  usuario       Usuarios @relation(fields: [idUser], references: [userId])
 }
 
 model ModosJogo {
