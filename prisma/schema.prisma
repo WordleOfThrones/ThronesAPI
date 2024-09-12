@@ -1,67 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Usuarios {
-  userId      Int      @id @default(autoincrement())
-  nameUser    String   @db.VarChar(100)
-  nickname    String   @unique @db.VarChar(30)
-  email       String   @unique @db.VarChar(100)
-  password    String   @db.VarChar(255)
-  lastLogin   DateTime?
-  recorde     Decimal? @db.Decimal(10, 2)
-  status      Int      @default(1)
-  isAdmin     Boolean  @default(false)
-  jogos       Jogos[]
+  userId    Int       @id @default(autoincrement())
+  nameUser  String    @db.VarChar(100)
+  nickname  String    @unique @db.VarChar(30)
+  email     String    @unique @db.VarChar(100)
+  password  String    @db.VarChar(255)
+  lastLogin DateTime?
+  recorde   Decimal?  @db.Decimal(10, 2)
+  status    Int       @default(1)
+  isAdmin   Boolean   @default(false)
+  jogos     Jogos[]
 }
 
 model Personagens {
-  idPersonagem     Int      @id @default(autoincrement())
-  nome             String   @db.VarChar(45)
-  descricao        String   @db.VarChar(2000)
-  casa             String   @db.VarChar(100)
-  genero           String   @db.Char(1)
-  raca             String   @db.VarChar(45)
-  titulo           String   @db.VarChar(500)
-  origem           String   @db.VarChar(100)
-  religiao         String   @db.VarChar(100)
-  serie            String   @db.VarChar(45)
-  primeiraAparicao String   @db.VarChar(11)
-  imagem           String   @db.VarChar(300)
-  imagemAdvinhacao String   @db.VarChar(300)
-  datas            Datas[] 
+  idPersonagem     Int     @id @default(autoincrement())
+  nome             String  @db.VarChar(45)
+  descricao        String  @db.VarChar(2000)
+  casa             String  @db.VarChar(100)
+  genero           String  @db.Char(1)
+  raca             String  @db.VarChar(45)
+  titulo           String  @db.VarChar(500)
+  origem           String  @db.VarChar(100)
+  religiao         String  @db.VarChar(100)
+  serie            String  @db.VarChar(45)
+  primeiraAparicao String  @db.VarChar(11)
+  imagem           String  @db.VarChar(300)
+  imagemAdvinhacao String  @db.VarChar(300)
+  datas            Datas[]
 }
 
 model Jogos {
   idJogo        Int      @id @default(autoincrement())
   idUser        Int
-  data          DateTime      
   qtdTentativas Int
-  tempo         Int      
+  tempo         Int
   status        Int      @default(0)
   pontuacaoDia  Decimal  @db.Decimal(10, 2)
-  datas         Datas[] 
+  data          DateTime
+  datas         Datas[]
   usuario       Usuarios @relation(fields: [idUser], references: [userId])
 }
 
 model ModosJogo {
-  idModo       Int      @id @default(autoincrement())
-  nomeModo     String   @db.VarChar(45)
-  datas        Datas[]
+  idModo   Int     @id @default(autoincrement())
+  nomeModo String  @db.VarChar(45)
+  datas    Datas[]
 }
 
 model Datas {
-  idData         Int      @id @default(autoincrement())
-  idModoJogo     Int
-  idPersonagem   Int
-  idJogo         Int
-  data           DateTime     @unique @db.Date  
-  modoJogo       ModosJogo    @relation(fields: [idModoJogo], references: [idModo])
-  personagem     Personagens  @relation(fields: [idPersonagem], references: [idPersonagem])
-  jogo           Jogos        @relation(fields: [idJogo], references: [idJogo])
+  idData       Int         @id @default(autoincrement())
+  idModoJogo   Int
+  idPersonagem Int
+  idJogo       Int
+  data         DateTime    @unique @db.Date
+  jogo         Jogos       @relation(fields: [idJogo], references: [idJogo])
+  modoJogo     ModosJogo   @relation(fields: [idModoJogo], references: [idModo])
+  personagem   Personagens @relation(fields: [idPersonagem], references: [idPersonagem])
 }
