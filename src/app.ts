@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
 import characterRoutes from './routes/character';
-import { uploadCharacter } from './services/dataService';
+import { inserirRegistrosDiarios } from './services/dataService';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ app.use(express.json());
 
 cron.schedule('0 0 * * *', () => {
   console.log('Executando inserção diária de personagens.');
-  uploadCharacter();
+  inserirRegistrosDiarios();
 });
 
 app.use('/api', userRoutes);
