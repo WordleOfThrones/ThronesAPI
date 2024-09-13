@@ -1,19 +1,24 @@
 import express from 'express';
+import cron from 'node-cron';
 import dotenv from 'dotenv';
-import uploadRoutes from './routes/upload';
 import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
 import characterRoutes from './routes/character';
+import { uploadCharacter } from './services/dataService';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-app.use('/api/upload', uploadRoutes);
-app.use('/api', authRoutes); 
-app.use('/api', userRoutes); 
+cron.schedule('0 0 * * *', () => {
+  console.log('Executando inserção diária de personagens.');
+  uploadCharacter();
+});
+
+app.use('/api', userRoutes);
 app.use('/api', characterRoutes);
+app.use('/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
