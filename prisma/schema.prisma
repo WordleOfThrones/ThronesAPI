@@ -33,7 +33,7 @@ model Personagens {
   serie            String  @db.VarChar(45)
   primeiraAparicao String  @db.VarChar(11)
   imagem           String  @db.VarChar(300)
-  imagemAdvinhacao String  @db.VarChar(300)
+  imagemAdvinhacao String  @db.VarChar(400)
   datas            Datas[]
 }
 

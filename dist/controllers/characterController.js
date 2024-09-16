@@ -108,8 +108,12 @@ const updateCharacter = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (!character) {
             return res.status(404).json({ message: 'Personagem não encontrado' });
         }
-        const imageUrl = (files === null || files === void 0 ? void 0 : files['image']) ? yield uploadImageToFirebase(files['image'][0], 'image') : character.imagem;
-        const guessImageUrl = (files === null || files === void 0 ? void 0 : files['guessImage']) ? yield uploadImageToFirebase(files['guessImage'][0], 'guessImage') : character.imagemAdvinhacao;
+        const imageUrl = (files === null || files === void 0 ? void 0 : files['image'])
+            ? yield uploadImageToFirebase(files['image'][0], 'image')
+            : character.imagem;
+        const guessImageUrl = (files === null || files === void 0 ? void 0 : files['guessImage'])
+            ? yield uploadImageToFirebase(files['guessImage'][0], 'guessImage')
+            : character.imagemAdvinhacao;
         const updatedCharacter = yield prismaClient_1.prisma.personagens.update({
             where: { idPersonagem: Number(id) },
             data: {

@@ -8,9 +8,9 @@ try {
     credential: admin.credential.cert({
       projectId: process.env.FIREBASE_PROJECT_ID,
       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL 
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL
     }),
-    storageBucket: "gs://wordle-of-thrones.appspot.com"
+    storageBucket: "wordle-of-thrones.appspot.com"
   });
   
   console.log('Firebase inicializado com sucesso');

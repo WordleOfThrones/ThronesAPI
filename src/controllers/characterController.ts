@@ -140,8 +140,12 @@ export const updateCharacter = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Personagem não encontrado' });
     }
 
-    const imageUrl = files?.['image'] ? await uploadImageToFirebase(files['image'][0], 'image') : character.imagem;
-    const guessImageUrl = files?.['guessImage'] ? await uploadImageToFirebase(files['guessImage'][0], 'guessImage') : character.imagemAdvinhacao;
+    const imageUrl = files?.['image']
+      ? await uploadImageToFirebase(files['image'][0], 'image')
+      : character.imagem;
+    const guessImageUrl = files?.['guessImage']
+      ? await uploadImageToFirebase(files['guessImage'][0], 'guessImage')
+      : character.imagemAdvinhacao;
 
     const updatedCharacter = await prisma.personagens.update({
       where: { idPersonagem: Number(id) },
