@@ -51,7 +51,7 @@ model Jogos {
 
 model ModosJogo {
   idModo   Int     @id @default(autoincrement())
-  nomeModo String  @db.VarChar(45)
+  nomeModo String  @db.VarChar(45) @unique
   datas    Datas[]
 }
 

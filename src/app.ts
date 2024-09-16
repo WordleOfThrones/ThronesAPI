@@ -1,7 +1,6 @@
 import express from 'express';
 import cron from 'node-cron';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
 import characterRoutes from './routes/character';
 import { inserirRegistrosDiarios } from './services/dataService';
@@ -16,9 +15,8 @@ cron.schedule('0 0 * * *', () => {
   inserirRegistrosDiarios();
 });
 
-app.use('/api', userRoutes);
-app.use('/api', characterRoutes);
-app.use('/auth', authRoutes);
+app.use('/api/users', userRoutes); 
+app.use('/api/characters', characterRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -1,8 +1,5 @@
 import express from 'express';
-import { getCharacter } from '../controllers/getCharacterController';
-import { uploadCharacter } from '../controllers/uploadCharacterController';
-import { deleteCharacter } from '../controllers/deleteCharacterController';
-import { updateCharacter } from '../controllers/updateCharacterController';
+import { getCharacter, uploadCharacter, deleteCharacter, updateCharacter } from '../controllers/characterController';
 
 const router = express.Router();
 

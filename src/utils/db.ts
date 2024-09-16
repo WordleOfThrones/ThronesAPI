@@ -10,7 +10,7 @@ try {
       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL 
     }),
-    storageBucket: "wordleofthrones-dc4d1.appspot.com"
+    storageBucket: "gs://wordle-of-thrones.appspot.com"
   });
   
   console.log('Firebase inicializado com sucesso');
