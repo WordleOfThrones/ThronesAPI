@@ -20,7 +20,7 @@ export const createGame = async (req: Request, res: Response) => {
       data: {
         idJogo: newGame.idJogo,
         idModoJogo: Number(idModoJogo),
-        idPersonagem: personagemAleatorio?.idPersonagem || undefined,
+        idPersonagem: personagemAleatorio?.idPersonagem || null,
         data: new Date(),
       },
     });
@@ -36,62 +36,62 @@ export const createGame = async (req: Request, res: Response) => {
 };
 
 const calculateScore = (tentativas: number, tempo: number): number => {
-	const baseScore = 100;
-	const penaltyTentativas = tentativas * 10;
-	const penaltyTempo = Math.floor(tempo / 60) * 5;
+  const baseScore = 100;
+  const penaltyTentativas = tentativas * 10;
+  const penaltyTempo = Math.floor(tempo / 60) * 5;
 
-	let score = baseScore - penaltyTentativas - penaltyTempo;
-	return score < 0 ? 0 : score;
+  let score = baseScore - penaltyTentativas - penaltyTempo;
+  return score < 0 ? 0 : score;
 };
 
 export const getAllGames = async (req: Request, res: Response) => {
-	try {
-		const games = await prisma.jogos.findMany();
-		return res.status(200).json(games);
-	} catch (error) {
-		console.error('Erro ao buscar jogos:', error);
-		return res.status(500).json({ message: 'Erro ao buscar jogos', error });
-	}
+  try {
+    const games = await prisma.jogos.findMany();
+    return res.status(200).json(games);
+  } catch (error) {
+    console.error('Erro ao buscar jogos:', error);
+    return res.status(500).json({ message: 'Erro ao buscar jogos', error });
+  }
 };
 
 export const getGameById = async (req: Request, res: Response) => {
-	const { id } = req.params;
+  const { id } = req.params;
 
-	try {
-		const game = await prisma.jogos.findUnique({
-			where: { idJogo: Number(id) },
-		});
+  try {
+    const game = await prisma.jogos.findUnique({
+      where: { idJogo: Number(id) },
+    });
 
-		if (!game) {
-			return res.status(404).json({ message: 'Jogo não encontrado' });
-		}
+    if (!game) {
+      return res.status(404).json({ message: 'Jogo não encontrado' });
+    }
 
-		return res.status(200).json(game);
-	} catch (error) {
-		console.error('Erro ao buscar jogo:', error);
-		return res.status(500).json({ message: 'Erro ao buscar jogo', error });
-	}
+    return res.status(200).json(game);
+  } catch (error) {
+    console.error('Erro ao buscar jogo:', error);
+    return res.status(500).json({ message: 'Erro ao buscar jogo', error });
+  }
 };
 
 export const deleteGame = async (req: Request, res: Response) => {
-	const { id } = req.params;
+  const { id } = req.params;
 
-	try {
-		const game = await prisma.jogos.findUnique({
-			where: { idJogo: Number(id) },
-		});
+  try {
+    const game = await prisma.jogos.findUnique({
+      where: { idJogo: Number(id) },
+    });
 
-		if (!game) {
-			return res.status(404).json({ message: 'Jogo não encontrado' });
-		}
+    if (!game) {
+      return res.status(404).json({ message: 'Jogo não encontrado' });
+    }
 
-		await prisma.jogos.delete({
-			where: { idJogo: Number(id) },
-		});
+    await prisma.jogos.delete({
+      where: { idJogo: Number(id) },
+    });
 
-		return res.status(200).json({ message: 'Jogo deletado com sucesso!' });
-	} catch (error) {
-		console.error('Erro ao deletar jogo:', error);
-		return res.status(500).json({ message: 'Erro ao deletar jogo', error });
-	}
+    return res.status(200).json({ message: 'Jogo deletado com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao deletar jogo:', error);
+    return res.status(500).json({ message: 'Erro ao deletar jogo', error });
+  }
 };
