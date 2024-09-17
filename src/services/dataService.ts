@@ -20,15 +20,11 @@ const personagemFoiSorteadoRecentemente = async (idPersonagem: number, idModoJog
 export const inserirRegistrosDiarios = async () => {
   try {
     const modosJogo = await prisma.modosJogo.findMany({
-      select: {
-        idModo: true,
-      },
+      select: { idModo: true },
     });
 
     const personagens = await prisma.personagens.findMany({
-      select: {
-        idPersonagem: true,
-      },
+      select: { idPersonagem: true },
     });
 
     if (personagens.length === 0 || modosJogo.length === 0) {
@@ -63,7 +59,6 @@ export const inserirRegistrosDiarios = async () => {
         data: {
           idPersonagem: personagemAleatorio.idPersonagem,
           idModoJogo: modo.idModo,
-          idJogo: undefined,
           data: new Date(),
         },
       });
@@ -72,7 +67,6 @@ export const inserirRegistrosDiarios = async () => {
     }
 
     console.log('Registros diários inseridos com sucesso!');
-    
   } catch (error) {
     console.error('Erro ao inserir registros diários:', error);
   }
