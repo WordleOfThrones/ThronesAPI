@@ -26,13 +26,13 @@ export const createGame = async (req: Request, res: Response) => {
     });
 
     await prisma.datas.create({
-      data: {
-        idJogo: newGame.idJogo,
-        idModoJogo: Number(idModoJogo),
-        idPersonagem: personagemAleatorio?.idPersonagem || null,
-        data: new Date(),
-      },
-    });
+			data: {
+				idJogo: newGame.idJogo,
+				idModoJogo: Number(idModoJogo),
+				idPersonagem: personagemAleatorio.idPersonagem,
+				data: new Date(),
+			},
+		});		
 
     return res.status(201).json({
       message: 'Jogo iniciado com sucesso!',

@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/user';
 import characterRoutes from './routes/character'; 
 import gameRoutes from './routes/game';
-import gameModeRoutes from './routes/gameMode'; 
 import { inserirRegistrosDiarios } from './services/dataService'; 
 
 dotenv.config(); 
@@ -20,7 +19,6 @@ cron.schedule('0 0 * * *', () => {
 app.use('/api/users', userRoutes);
 app.use('/api/characters', characterRoutes);
 app.use('/api/games', gameRoutes); 
-app.use('/api/game-modes', gameModeRoutes);
 
 app.get('/api', (req, res) => {
   res.send('API funcionando');
