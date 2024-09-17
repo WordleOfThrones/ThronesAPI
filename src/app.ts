@@ -16,7 +16,7 @@ cron.schedule('0 0 * * *', () => {
   inserirRegistrosDiarios();
 });
 
-app.get('/api/testDataService', async (req, res) => {
+app.post('/api/test-inserir-registros', async (req, res) => {
   try {
     await inserirRegistrosDiarios();
     res.status(200).json({ message: 'Registros inseridos com sucesso!' });

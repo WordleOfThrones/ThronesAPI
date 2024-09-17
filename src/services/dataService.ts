@@ -36,25 +36,10 @@ export const inserirRegistrosDiarios = async () => {
       return;
     }
 
-    const dataHoje = new Date();
-    dataHoje.setUTCHours(0, 0, 0, 0);
-
     for (const modo of modosJogo) {
       let personagemAleatorio;
       let tentativa = 0;
       let personagemSorteado = false;
-
-      const personagemSorteadoHoje = await prisma.datas.findFirst({
-        where: {
-          idModoJogo: modo.idModo,
-          data: dataHoje,
-        },
-      });
-
-      if (personagemSorteadoHoje) {
-        console.log(`Já existe um personagem sorteado para o modo ${modo.idModo} hoje.`);
-        continue;
-      }
 
       while (!personagemSorteado && tentativa < 10) {
         const randomIndex = Math.floor(Math.random() * personagens.length);
@@ -74,23 +59,11 @@ export const inserirRegistrosDiarios = async () => {
         return;
       }
 
-      const novoJogo = await prisma.jogos.create({
-        data: {
-          idUser: 1, 
-          qtdTentativas: 0,
-          tempo: 0,
-          status: 0,
-          pontuacaoDia: 0,
-          data: dataHoje,
-        },
-      });
-
       await prisma.datas.create({
         data: {
           idPersonagem: personagemAleatorio.idPersonagem,
           idModoJogo: modo.idModo,
-          idJogo: novoJogo.idJogo,
-          data: dataHoje, 
+          data: new Date(),
         },
       });
 
