@@ -44,7 +44,6 @@ export const getAllGameModes = async (req: Request, res: Response) => {
 };
 
 export const updateGameMode = async (req: Request, res: Response) => {
-  const { id } = req.params;
   const { gameModeName } = req.body;
 
   if (!gameModeName) {
@@ -53,25 +52,26 @@ export const updateGameMode = async (req: Request, res: Response) => {
 
   try {
     const existingMode = await prisma.modosJogo.findUnique({
-      where: { idModo: Number(id) },
+      where: { nomeModo: gameModeName },
     });
 
-    if (!existingMode) {
-      return res.status(404).json({ message: 'Modo de jogo não encontrado' });
+    if (existingMode) {
+      return res.status(400).json({ message: 'Modo de jogo já existe' });
     }
 
-    const updatedGameMode = await prisma.modosJogo.update({
-      where: { idModo: Number(id) },
-      data: { nomeModo: gameModeName },
+    const newGameMode = await prisma.modosJogo.create({
+      data: {
+        nomeModo: gameModeName,
+      },
     });
 
-    return res.status(200).json({
-      message: 'Modo de jogo atualizado com sucesso!',
-      mode: updatedGameMode,
+    return res.status(201).json({
+      message: 'Modo de jogo criado com sucesso!',
+      mode: newGameMode,
     });
   } catch (error) {
-    console.error('Erro ao atualizar modo de jogo:', error);
-    return res.status(500).json({ message: 'Erro ao atualizar modo de jogo' });
+    console.error('Erro ao criar modo de jogo:', error);
+    return res.status(500).json({ message: 'Erro ao criar modo de jogo' });
   }
 };
 
