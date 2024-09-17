@@ -5,8 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 
 const upload = multer({ storage: multer.memoryStorage() }).fields([
-  { name: 'image', maxCount: 1 },
-  { name: 'guessImage', maxCount: 1 },
+  { name: 'image', maxCount: 1 }
 ]);
 
 const uploadImageToFirebase = (file: Express.Multer.File, folder: string) => {
@@ -53,8 +52,8 @@ export const uploadCharacter = (req: Request, res: Response) => {
       firstAppearance,
     } = req.body;
 
-    if (!files['image'] || !files['guessImage']) {
-      return res.status(400).json({ message: 'Ambas as imagens são obrigatórias' });
+    if (!files['image']) {
+      return res.status(400).json({ message: 'A imagem é obrigatória' });
     }
 
     if (!name || !description || !house || !gender || !race || !title || !origin || !religion || !series || !firstAppearance) {
@@ -63,7 +62,6 @@ export const uploadCharacter = (req: Request, res: Response) => {
 
     try {
       const imageUrl = await uploadImageToFirebase(files['image'][0], 'image');
-      const guessImageUrl = await uploadImageToFirebase(files['guessImage'][0], 'guessImage');
 
       const character = await prisma.personagens.create({
         data: {
@@ -78,7 +76,6 @@ export const uploadCharacter = (req: Request, res: Response) => {
           serie: series,
           primeiraAparicao: firstAppearance,
           imagem: imageUrl,
-          imagemAdvinhacao: guessImageUrl,
         },
       });
 
@@ -140,12 +137,7 @@ export const updateCharacter = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Personagem não encontrado' });
     }
 
-    const imageUrl = files?.['image']
-      ? await uploadImageToFirebase(files['image'][0], 'image')
-      : character.imagem;
-    const guessImageUrl = files?.['guessImage']
-      ? await uploadImageToFirebase(files['guessImage'][0], 'guessImage')
-      : character.imagemAdvinhacao;
+    const imageUrl = files?.['image'] ? await uploadImageToFirebase(files['image'][0], 'image') : character.imagem;
 
     const updatedCharacter = await prisma.personagens.update({
       where: { idPersonagem: Number(id) },
@@ -161,7 +153,6 @@ export const updateCharacter = async (req: Request, res: Response) => {
         serie: series || character.serie,
         primeiraAparicao: firstAppearance || character.primeiraAparicao,
         imagem: imageUrl,
-        imagemAdvinhacao: guessImageUrl,
       },
     });
 
