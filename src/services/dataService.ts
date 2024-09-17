@@ -63,7 +63,7 @@ export const inserirRegistrosDiarios = async () => {
         data: {
           idPersonagem: personagemAleatorio.idPersonagem,
           idModoJogo: modo.idModo,
-          idJogo: null,
+          idJogo: undefined,
           data: new Date(),
         },
       });
