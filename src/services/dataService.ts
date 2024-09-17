@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../utils/prismaClient';
 
 const personagemFoiSorteadoRecentemente = async (idPersonagem: number, idModoJogo: number): Promise<boolean> => {
@@ -46,7 +47,7 @@ export const inserirRegistrosDiarios = async () => {
         if (!foiSorteado) {
           personagemSorteado = true;
         } else {
-          tentativa++; 
+          tentativa++;
         }
       }
 
@@ -55,12 +56,14 @@ export const inserirRegistrosDiarios = async () => {
         return;
       }
 
+      const novoRegistro: Prisma.DatasUncheckedCreateInput = {
+        idPersonagem: personagemAleatorio.idPersonagem,
+        idModoJogo: modo.idModo,
+        data: new Date(),
+      };
+
       await prisma.datas.create({
-        data: {
-          idPersonagem: personagemAleatorio.idPersonagem,
-          idModoJogo: modo.idModo,
-          data: new Date(),
-        },
+        data: novoRegistro,
       });
 
       console.log(`Personagem ${personagemAleatorio.idPersonagem} sorteado para o Modo ${modo.idModo}`);
