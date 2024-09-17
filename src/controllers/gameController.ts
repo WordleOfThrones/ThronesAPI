@@ -10,14 +10,22 @@ const calculateScore = (tentativas: number, tempo: number): number => {
   return score < 0 ? 0 : score;
 };
 
+const getOnlyDate = (date: Date): Date => {
+  const newDate = new Date(date);
+  newDate.setHours(0, 0, 0, 0); 
+  return newDate;
+};
+
 export const createGame = async (req: Request, res: Response) => {
   const { idUser, idModoJogo } = req.body;
 
   try {
+    const hoje = getOnlyDate(new Date());
+
     const personagemDoDia = await prisma.datas.findFirst({
       where: {
         idModoJogo: Number(idModoJogo),
-        data: new Date(),
+        data: hoje,
       },
     });
 
@@ -28,7 +36,7 @@ export const createGame = async (req: Request, res: Response) => {
     const newGame = await prisma.jogos.create({
       data: {
         idUser: Number(idUser),
-        qtdTentativas: 0,
+        qtdTentativas: 0, 
         tempo: 0,
         status: 0,
         pontuacaoDia: 0,
