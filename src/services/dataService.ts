@@ -17,20 +17,6 @@ const personagemFoiSorteadoRecentemente = async (idPersonagem: number, idModoJog
   return sorteioRecente !== null;
 };
 
-const personagemJaSorteadoHoje = async (idModoJogo: number): Promise<boolean> => {
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-
-  const sorteioHoje = await prisma.datas.findFirst({
-    where: {
-      idModoJogo,
-      data: hoje,
-    },
-  });
-
-  return sorteioHoje !== null;
-};
-
 export const inserirRegistrosDiarios = async () => {
   try {
     const modosJogo = await prisma.modosJogo.findMany({
@@ -47,12 +33,6 @@ export const inserirRegistrosDiarios = async () => {
     }
 
     for (const modo of modosJogo) {
-      const jaSorteadoHoje = await personagemJaSorteadoHoje(modo.idModo);
-      if (jaSorteadoHoje) {
-        console.log(`Personagem já foi sorteado para o modo ${modo.idModo} hoje.`);
-        continue;
-      }
-
       let personagemAleatorio;
       let tentativa = 0;
       let personagemSorteado = false;
@@ -66,7 +46,7 @@ export const inserirRegistrosDiarios = async () => {
         if (!foiSorteado) {
           personagemSorteado = true;
         } else {
-          tentativa++;
+          tentativa++; 
         }
       }
 
