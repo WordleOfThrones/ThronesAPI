@@ -16,6 +16,15 @@ cron.schedule('0 0 * * *', () => {
   inserirRegistrosDiarios();
 });
 
+app.get('/api/testDataService', async (req, res) => {
+  try {
+    await inserirRegistrosDiarios();
+    res.status(200).json({ message: 'Registros inseridos com sucesso!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao inserir registros', error });
+  }
+});
+
 app.use('/api/users', userRoutes);
 app.use('/api/characters', characterRoutes);
 app.use('/api/games', gameRoutes); 
