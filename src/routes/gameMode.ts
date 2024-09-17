@@ -1,8 +1,10 @@
 import express from 'express';
-import { updateGameMode } from '../controllers/gameModeController';
+import { createGameMode, deleteGameMode, updateGameMode } from '../controllers/gameModeController';
 
 const router = express.Router();
 
-router.post('/game-mode', updateGameMode);
+router.post('/create', createGameMode);
+router.put('/update/:id', updateGameMode);
+router.delete('/delete/:id', deleteGameMode);
 
 export default router;

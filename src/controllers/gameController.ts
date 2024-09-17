@@ -1,6 +1,15 @@
 import { Request, Response } from 'express';
 import { prisma } from '../utils/prismaClient';
 
+const calculateScore = (tentativas: number, tempo: number): number => {
+  const baseScore = 100;
+  const penaltyTentativas = tentativas * 10;
+  const penaltyTempo = Math.floor(tempo / 60) * 5;
+
+  let score = baseScore - penaltyTentativas - penaltyTempo;
+  return score < 0 ? 0 : score;
+};
+
 export const createGame = async (req: Request, res: Response) => {
   const { idUser, idModoJogo, personagemAleatorio } = req.body;
 
@@ -32,44 +41,6 @@ export const createGame = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Erro ao iniciar jogo:', error);
     return res.status(500).json({ message: 'Erro ao iniciar jogo', error });
-  }
-};
-
-const calculateScore = (tentativas: number, tempo: number): number => {
-  const baseScore = 100;
-  const penaltyTentativas = tentativas * 10;
-  const penaltyTempo = Math.floor(tempo / 60) * 5;
-
-  let score = baseScore - penaltyTentativas - penaltyTempo;
-  return score < 0 ? 0 : score;
-};
-
-export const getAllGames = async (req: Request, res: Response) => {
-  try {
-    const games = await prisma.jogos.findMany();
-    return res.status(200).json(games);
-  } catch (error) {
-    console.error('Erro ao buscar jogos:', error);
-    return res.status(500).json({ message: 'Erro ao buscar jogos', error });
-  }
-};
-
-export const getGameById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const game = await prisma.jogos.findUnique({
-      where: { idJogo: Number(id) },
-    });
-
-    if (!game) {
-      return res.status(404).json({ message: 'Jogo não encontrado' });
-    }
-
-    return res.status(200).json(game);
-  } catch (error) {
-    console.error('Erro ao buscar jogo:', error);
-    return res.status(500).json({ message: 'Erro ao buscar jogo', error });
   }
 };
 
