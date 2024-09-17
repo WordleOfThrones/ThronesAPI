@@ -59,10 +59,22 @@ export const inserirRegistrosDiarios = async () => {
         return;
       }
 
+      const novoJogo = await prisma.jogos.create({
+        data: {
+          idUser: 1,
+          qtdTentativas: 0,
+          tempo: 0,
+          status: 0,
+          pontuacaoDia: 0,
+          data: new Date(),
+        },
+      });
+
       await prisma.datas.create({
         data: {
           idPersonagem: personagemAleatorio.idPersonagem,
           idModoJogo: modo.idModo,
+          idJogo: novoJogo.idJogo, 
           data: new Date(),
         },
       });
