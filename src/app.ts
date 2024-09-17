@@ -16,12 +16,12 @@ cron.schedule('0 0 * * *', () => {
   inserirRegistrosDiarios();
 });
 
-app.post('/api/test-inserir-registros', async (req, res) => {
+app.get('/api/test-inserir', async (req, res) => {
   try {
     await inserirRegistrosDiarios();
-    res.status(200).json({ message: 'Registros inseridos com sucesso!' });
+    res.status(200).send('Inserção de personagens feita com sucesso!');
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao inserir registros', error });
+    res.status(500).send('Erro ao inserir personagens.');
   }
 });
 
