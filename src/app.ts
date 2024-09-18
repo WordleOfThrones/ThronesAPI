@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import cron from 'node-cron';
 import dotenv from 'dotenv';
@@ -32,6 +33,12 @@ app.use('/api/games', gameRoutes);
 app.get('/api', (req, res) => {
   res.send('API funcionando');
 });
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

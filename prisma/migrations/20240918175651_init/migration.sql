@@ -71,9 +71,6 @@ CREATE UNIQUE INDEX "Usuarios_email_key" ON "Usuarios"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "ModosJogo_nomeModo_key" ON "ModosJogo"("nomeModo");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Datas_data_key" ON "Datas"("data");
-
 -- AddForeignKey
 ALTER TABLE "Jogos" ADD CONSTRAINT "Jogos_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "Usuarios"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
