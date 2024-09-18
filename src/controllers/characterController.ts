@@ -92,11 +92,20 @@ export const uploadCharacter = (req: Request, res: Response) => {
 
 export const getCharacter = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { name } = req.query;
 
   try {
-    const character = await prisma.personagens.findUnique({
-      where: { idPersonagem: Number(id) },
-    });
+    let character;
+
+    if (id) {
+      character = await prisma.personagens.findUnique({
+        where: { idPersonagem: Number(id) },
+      });
+    } else if (name) {
+      character = await prisma.personagens.findFirst({
+        where: { nome: String(name) },
+      });
+    }
 
     if (!character) {
       return res.status(404).json({ message: 'Personagem não encontrado' });
