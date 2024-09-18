@@ -12,6 +12,12 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
+
 cron.schedule('0 0 * * *', () => {
   console.log('Executando inserção diária de personagens.');
   inserirRegistrosDiarios();
@@ -33,12 +39,6 @@ app.use('/api/games', gameRoutes);
 app.get('/api', (req, res) => {
   res.send('API funcionando');
 });
-
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true
-}));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
