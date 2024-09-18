@@ -103,7 +103,7 @@ export const getCharacter = async (req: Request, res: Response) => {
       });
     } else if (name) {
       character = await prisma.personagens.findFirst({
-        where: { nome: String(name) },
+        where: { nome: { equals: String(name), mode: 'insensitive' } },
       });
     }
 

@@ -3,7 +3,7 @@ import { getCharacter, uploadCharacter, deleteCharacter, updateCharacter } from 
 
 const router = express.Router();
 
-router.get('/character/:id', getCharacter);
+router.get('/character/:id?', getCharacter);
 router.post('/character', uploadCharacter);
 router.delete('/character/:id', deleteCharacter);
 router.put('/character/:id', updateCharacter);
