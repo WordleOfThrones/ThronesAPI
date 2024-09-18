@@ -57,7 +57,7 @@ model Datas {
   idData       Int         @id @default(autoincrement())
   idModoJogo   Int
   idPersonagem Int
-  data         DateTime    @unique @db.Date
+  data         DateTime    @db.Date
   modoJogo     ModosJogo   @relation(fields: [idModoJogo], references: [idModo])
   personagem   Personagens @relation(fields: [idPersonagem], references: [idPersonagem])
 }
