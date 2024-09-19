@@ -1,93 +1,46 @@
 import { Request, Response } from 'express';
 import { prisma } from '../utils/prismaClient';
-import { bucket } from '../utils/db';
-import { v4 as uuidv4 } from 'uuid';
-import multer from 'multer';
 
-const upload = multer({ storage: multer.memoryStorage() }).fields([
-  { name: 'image', maxCount: 1 }
-]);
+export const uploadCharacter = async (req: Request, res: Response) => {
+  const {
+    name,
+    description,
+    house,
+    gender,
+    race,
+    title,
+    origin,
+    religion,
+    series,
+    firstAppearance,
+    image
+  } = req.body;
 
-const uploadImageToFirebase = (file: Express.Multer.File, folder: string) => {
-  return new Promise<string>((resolve, reject) => {
-    const newFileName = `${folder}/${uuidv4()}-${file.originalname}`;
-    const fileUpload = bucket.file(newFileName);
-
-    const blobStream = fileUpload.createWriteStream({
-      resumable: false,
-      contentType: file.mimetype,
+  try {
+    const character = await prisma.personagens.create({
+      data: {
+        nome: name,
+        descricao: description,
+        casa: house,
+        genero: gender,
+        raca: race,
+        titulo: title,
+        origem: origin,
+        religiao: religion,
+        serie: series,
+        primeiraAparicao: firstAppearance,
+        imagem: image,
+      },
     });
 
-    blobStream.on('error', (error) => reject(error));
-
-    blobStream.on('finish', () => {
-      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${newFileName}`;
-      resolve(publicUrl);
+    return res.status(201).json({
+      message: 'Personagem adicionado com sucesso!',
+      personagem: character,
     });
-
-    blobStream.end(file.buffer);
-  });
-};
-
-export const uploadCharacter = (req: Request, res: Response) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro no upload', error: err });
-    }
-
-    const files = req.files as {
-      [fieldname: string]: Express.Multer.File[];
-    };
-
-    const {
-      name,
-      description,
-      house,
-      gender,
-      race,
-      title,
-      origin,
-      religion,
-      series,
-      firstAppearance,
-    } = req.body;
-
-    if (!files['image']) {
-      return res.status(400).json({ message: 'A imagem é obrigatória' });
-    }
-
-    if (!name || !description || !house || !gender || !race || !title || !origin || !religion || !series || !firstAppearance) {
-      return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
-    }
-
-    try {
-      const imageUrl = await uploadImageToFirebase(files['image'][0], 'image');
-
-      const character = await prisma.personagens.create({
-        data: {
-          nome: name,
-          descricao: description,
-          casa: house,
-          genero: gender,
-          raca: race,
-          titulo: title,
-          origem: origin,
-          religiao: religion,
-          serie: series,
-          primeiraAparicao: firstAppearance,
-          imagem: imageUrl,
-        },
-      });
-
-      return res.status(201).json({
-        message: 'Personagem adicionado com sucesso!',
-        personagem: character,
-      });
-
-    } catch (error) {
-      return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados', error });
-    }
-  });
+  } catch (error) {
+    console.error('Erro ao salvar personagem no banco de dados', error);
+    return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados', error });
+  }
 };
 
 export const getCharacter = async (req: Request, res: Response) => {
@@ -131,11 +84,8 @@ export const updateCharacter = async (req: Request, res: Response) => {
     religion,
     series,
     firstAppearance,
+    image
   } = req.body;
-
-  const files = req.files as {
-    [fieldname: string]: Express.Multer.File[];
-  };
 
   try {
     const character = await prisma.personagens.findUnique({
@@ -145,8 +95,6 @@ export const updateCharacter = async (req: Request, res: Response) => {
     if (!character) {
       return res.status(404).json({ message: 'Personagem não encontrado' });
     }
-
-    const imageUrl = files?.['image'] ? await uploadImageToFirebase(files['image'][0], 'image') : character.imagem;
 
     const updatedCharacter = await prisma.personagens.update({
       where: { idPersonagem: Number(id) },
@@ -161,7 +109,7 @@ export const updateCharacter = async (req: Request, res: Response) => {
         religiao: religion || character.religiao,
         serie: series || character.serie,
         primeiraAparicao: firstAppearance || character.primeiraAparicao,
-        imagem: imageUrl,
+        imagem: image || character.imagem
       },
     });
 
