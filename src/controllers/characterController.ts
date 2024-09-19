@@ -13,8 +13,12 @@ export const uploadCharacter = async (req: Request, res: Response) => {
     religion,
     series,
     firstAppearance,
-    image
+    imageUrl,
   } = req.body;
+
+  if (!name || !description || !house || !gender || !race || !title || !origin || !religion || !series || !firstAppearance || !imageUrl) {
+    return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
+  }
 
   try {
     const character = await prisma.personagens.create({
@@ -29,7 +33,7 @@ export const uploadCharacter = async (req: Request, res: Response) => {
         religiao: religion,
         serie: series,
         primeiraAparicao: firstAppearance,
-        imagem: image,
+        imagem: imageUrl,
       },
     });
 
@@ -38,7 +42,6 @@ export const uploadCharacter = async (req: Request, res: Response) => {
       personagem: character,
     });
   } catch (error) {
-    console.error('Erro ao salvar personagem no banco de dados', error);
     return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados', error });
   }
 };
@@ -84,7 +87,7 @@ export const updateCharacter = async (req: Request, res: Response) => {
     religion,
     series,
     firstAppearance,
-    image
+    imageUrl,
   } = req.body;
 
   try {
@@ -109,7 +112,7 @@ export const updateCharacter = async (req: Request, res: Response) => {
         religiao: religion || character.religiao,
         serie: series || character.serie,
         primeiraAparicao: firstAppearance || character.primeiraAparicao,
-        imagem: image || character.imagem
+        imagem: imageUrl || character.imagem,
       },
     });
 
