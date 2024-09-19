@@ -2,25 +2,15 @@ import { Request, Response } from 'express';
 import { prisma } from '../utils/prismaClient';
 
 export const uploadCharacter = async (req: Request, res: Response) => {
-  const {
-    name,
-    description,
-    house,
-    gender,
-    race,
-    title,
-    origin,
-    religion,
-    series,
-    firstAppearance,
-    imageUrl,
-  } = req.body;
-
-  if (!name || !description || !house || !gender || !race || !title || !origin || !religion || !series || !firstAppearance || !imageUrl) {
-    return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
-  }
-
   try {
+    console.log('Request body:', req.body);
+
+    const { name, description, house, gender, race, title, origin, religion, series, firstAppearance, imageUrl } = req.body;
+
+    if (!name || !description || !house || !gender || !race || !title || !origin || !religion || !series || !firstAppearance || !imageUrl) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+    }
+
     const character = await prisma.personagens.create({
       data: {
         nome: name,
@@ -37,12 +27,10 @@ export const uploadCharacter = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(201).json({
-      message: 'Personagem adicionado com sucesso!',
-      personagem: character,
-    });
+    return res.status(201).json({ message: 'Personagem adicionado com sucesso!', personagem: character });
   } catch (error) {
-    return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados', error });
+    console.error('Erro ao salvar personagem no banco de dados:', error);
+    return res.status(500).json({ message: 'Erro ao salvar personagem no banco de dados.', error });
   }
 };
 
