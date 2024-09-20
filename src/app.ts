@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'https://wordleofthrones-if0reklpp-avelar-rodrigues-de-sousas-projects.vercel.app/',
+  origin: 'https://wordleofthrones.vercel.app/',
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
   allowedHeaders: 'Content-Type,Authorization',
