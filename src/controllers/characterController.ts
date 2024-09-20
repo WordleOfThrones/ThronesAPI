@@ -62,6 +62,27 @@ export const getCharacter = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllCharacters = async (req: Request, res: Response) => {
+  try {
+    const characters = await prisma.personagens.findMany({
+      select: {
+        idPersonagem: true,
+        nome: true,
+        imagem: true,
+      },
+    });
+
+    if (!characters || characters.length === 0) {
+      return res.status(404).json({ message: 'Nenhum personagem encontrado' });
+    }
+
+    return res.status(200).json(characters);
+  } catch (error) {
+    console.error('Erro ao buscar personagens:', error);
+    return res.status(500).json({ error: 'Erro ao buscar personagens' });
+  }
+};
+
 export const updateCharacter = async (req: Request, res: Response) => {
   const { id } = req.params;
   const {

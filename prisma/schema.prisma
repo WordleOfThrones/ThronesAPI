@@ -25,7 +25,7 @@ model Personagens {
   nome             String  @db.VarChar(45)
   descricao        String  @db.VarChar(2000)
   casa             String  @db.VarChar(100)
-  genero           String  @db.Char(1)
+  genero           String  @db.Char(30)
   raca             String  @db.VarChar(45)
   titulo           String  @db.VarChar(500)
   origem           String  @db.VarChar(100)
