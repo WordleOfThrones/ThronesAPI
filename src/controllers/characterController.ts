@@ -151,9 +151,20 @@ export const deleteCharacter = async (req: Request, res: Response) => {
       where: { idPersonagem: Number(id) },
     });
 
-    return res.status(200).json({ message: 'Personagem deletado com sucesso' });
+    const remainingCharacters = await prisma.personagens.findMany({
+      orderBy: { idPersonagem: 'asc' },
+    });
+
+    for (let index = 0; index < remainingCharacters.length; index++) {
+      await prisma.personagens.update({
+        where: { idPersonagem: remainingCharacters[index].idPersonagem },
+        data: { idPersonagem: index + 1 },
+      });
+    }
+
+    return res.status(200).json({ message: 'Personagem deletado e IDs reordenados com sucesso' });
   } catch (error) {
-    console.error('Erro ao deletar personagem:', error);
-    return res.status(500).json({ message: 'Erro ao deletar personagem' });
+    console.error('Erro ao deletar personagem e reordenar IDs:', error);
+    return res.status(500).json({ message: 'Erro ao deletar personagem e reordenar IDs' });
   }
 };
