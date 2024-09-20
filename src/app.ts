@@ -12,10 +12,19 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+const allowedOrigins = [
+  'https://wordleofthrones.vercel.app', 
+  'https://wordleofthrones-nn604k8ws-avelar-rodrigues-de-sousas-projects.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://wordleofthrones.vercel.app/',
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 }));
 
 cron.schedule('0 0 * * *', () => {
