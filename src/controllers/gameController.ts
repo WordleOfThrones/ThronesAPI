@@ -12,12 +12,12 @@ const calculateScore = (tentativas: number, tempo: number): number => {
 
 const getOnlyDate = (date: Date): Date => {
   const newDate = new Date(date);
-  newDate.setHours(0, 0, 0, 0); 
+  newDate.setHours(0, 0, 0, 0);
   return newDate;
 };
 
 export const createGame = async (req: Request, res: Response) => {
-  const { idUser, idModoJogo } = req.body;
+  const { idUser, idModoJogo, tentativas } = req.body;
 
   try {
     const hoje = getOnlyDate(new Date());
@@ -33,22 +33,25 @@ export const createGame = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Personagem do dia não encontrado.' });
     }
 
-    const newGame = await prisma.jogos.create({
-      data: {
-        idUser: Number(idUser),
-        qtdTentativas: 0, 
-        tempo: 0,
-        status: 0,
-        pontuacaoDia: 0,
-        data: new Date(),
-      },
-    });
+    if (tentativas == 1) {
+      const newGame = await prisma.jogos.create({
+        data: {
+          idUser: Number(idUser),
+          qtdTentativas: tentativas,
+          tempo: 0,
+          status: 0,
+          pontuacaoDia: 0,
+          data: new Date(),
+        },
+      });
 
-    return res.status(201).json({
-      message: 'Jogo iniciado com sucesso!',
-      game: newGame,
-      personagem: personagemDoDia.idPersonagem,
-    });
+      return res.status(201).json({
+        message: 'Jogo iniciado com sucesso!',
+        game: newGame,
+        personagem: personagemDoDia.idPersonagem,
+      });
+    }
+
   } catch (error) {
     console.error('Erro ao iniciar jogo:', error);
     return res.status(500).json({ message: 'Erro ao iniciar jogo', error });
