@@ -38,12 +38,14 @@ model Personagens {
 
 model Jogos {
   idJogo        Int      @id @default(autoincrement())
+  idModoJogo    Int
   idUser        Int
   qtdTentativas Int
   tempo         Int
   status        Int      @default(0)
   pontuacaoDia  Decimal  @db.Decimal(10, 2)
   data          DateTime
+  modoJogo      ModosJogo @relation(fields: [idModoJogo], references: [idModo])
   usuario       Usuarios @relation(fields: [idUser], references: [userId])
 }
 
@@ -51,6 +53,7 @@ model ModosJogo {
   idModo   Int     @id @default(autoincrement())
   nomeModo String  @db.VarChar(45) @unique
   datas    Datas[]
+  jogos    Jogos[]
 }
 
 model Datas {

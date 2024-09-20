@@ -41,6 +41,7 @@ export const createGame = async (req: Request, res: Response) => {
           tempo: 0,
           status: 0,
           pontuacaoDia: 0,
+          idModoJogo: Number(idModoJogo),
           data: new Date(),
         },
       });
@@ -60,7 +61,7 @@ export const createGame = async (req: Request, res: Response) => {
 
 export const updateGame = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { tentativas, tempo, status } = req.body;
+  const { tentativas, tempo, status, idModoJogo } = req.body;
 
   try {
     const existingGame = await prisma.jogos.findUnique({
@@ -79,6 +80,7 @@ export const updateGame = async (req: Request, res: Response) => {
         qtdTentativas: tentativas,
         tempo: tempo,
         status: status,
+        idModoJogo: Number(idModoJogo),
         pontuacaoDia: score,
       },
     });
