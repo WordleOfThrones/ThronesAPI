@@ -57,3 +57,39 @@ export const createGame = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Erro ao iniciar jogo', error });
   }
 };
+
+export const updateGame = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { tentativas, tempo, status } = req.body;
+
+  try {
+    const existingGame = await prisma.jogos.findUnique({
+      where: { idJogo: Number(id) },
+    });
+
+    if (!existingGame) {
+      return res.status(404).json({ error: 'Jogo não encontrado.' });
+    }
+
+    const score = calculateScore(tentativas, tempo);
+
+    const updatedGame = await prisma.jogos.update({
+      where: { idJogo: Number(id) },
+      data: {
+        qtdTentativas: tentativas,
+        tempo: tempo,
+        status: status,
+        pontuacaoDia: score,
+      },
+    });
+
+    return res.status(200).json({
+      message: 'Jogo atualizado com sucesso!',
+      game: updatedGame,
+      score,
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar jogo:', error);
+    return res.status(500).json({ message: 'Erro ao atualizar jogo', error });
+  }
+}
