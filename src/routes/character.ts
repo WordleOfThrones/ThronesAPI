@@ -49,6 +49,7 @@ router.get('/character/sorted-character', async (req, res) => {
       nome: sorteio.personagem.nome,
       genero: sorteio.personagem.genero,
       titulo: sorteio.personagem.titulo,
+      casa: sorteio.personagem.casa,
       raca: sorteio.personagem.raca,
       origem: sorteio.personagem.origem,
       religiao: sorteio.personagem.religiao,
