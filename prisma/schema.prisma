@@ -37,21 +37,21 @@ model Personagens {
 }
 
 model Jogos {
-  idJogo        Int      @id @default(autoincrement())
-  idModoJogo    Int
+  idJogo        Int       @id @default(autoincrement())
   idUser        Int
   qtdTentativas Int
   tempo         Int
-  status        Int      @default(0)
-  pontuacaoDia  Decimal  @db.Decimal(10, 2)
+  status        Int       @default(0)
+  pontuacaoDia  Decimal   @db.Decimal(10, 2)
   data          DateTime
+  idModoJogo    Int
   modoJogo      ModosJogo @relation(fields: [idModoJogo], references: [idModo])
-  usuario       Usuarios @relation(fields: [idUser], references: [userId])
+  usuario       Usuarios  @relation(fields: [idUser], references: [userId])
 }
 
 model ModosJogo {
   idModo   Int     @id @default(autoincrement())
-  nomeModo String  @db.VarChar(45) @unique
+  nomeModo String  @unique @db.VarChar(45)
   datas    Datas[]
   jogos    Jogos[]
 }
@@ -63,4 +63,9 @@ model Datas {
   data         DateTime    @db.Date
   modoJogo     ModosJogo   @relation(fields: [idModoJogo], references: [idModo])
   personagem   Personagens @relation(fields: [idPersonagem], references: [idPersonagem])
+}
+
+generator client {
+  provider = "prisma-client-js"
+  seed = "prisma/seed.ts"
 }

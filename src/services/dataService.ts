@@ -52,14 +52,14 @@ export const inserirRegistrosDiarios = async () => {
       }
 
       if (!personagemAleatorio) {
-        console.error('Nenhum personagem foi sorteado corretamente.');
-        return;
+        console.error(`Nenhum personagem foi sorteado corretamente para o modo ${modo.idModo}.`);
+        continue;
       }
 
       const novoRegistro: Prisma.DatasUncheckedCreateInput = {
         idPersonagem: personagemAleatorio.idPersonagem,
         idModoJogo: modo.idModo,
-        data: new Date(),
+        data: new Date(), // Data atual
       };
 
       await prisma.datas.create({
