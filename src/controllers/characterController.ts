@@ -34,31 +34,50 @@ export const uploadCharacter = async (req: Request, res: Response) => {
   }
 };
 
-export const getCharacter = async (req: Request, res: Response) => {
+export const getCharacterById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name } = req.query;
 
   try {
-    let character;
-
-    if (id) {
-      character = await prisma.personagens.findUnique({
-        where: { idPersonagem: Number(id) },
-      });
-    } else if (name) {
-      character = await prisma.personagens.findFirst({
-        where: { nome: { equals: String(name), mode: 'insensitive' } },
-      });
+    const numericId = Number(id);
+    if (isNaN(numericId) || numericId <= 0) {
+      return res.status(400).json({ message: 'O ID do personagem deve ser um número válido.' });
     }
 
+    const character = await prisma.personagens.findUnique({
+      where: { idPersonagem: numericId },
+    });
+
     if (!character) {
-      return res.status(404).json({ message: 'Personagem não encontrado' });
+      return res.status(404).json({ message: 'Personagem não encontrado.' });
     }
 
     return res.status(200).json(character);
   } catch (error) {
-    console.error('Erro ao buscar personagem:', error);
-    return res.status(500).json({ error: 'Erro ao buscar personagem' });
+    console.error('Erro ao buscar personagem por ID:', error);
+    return res.status(500).json({ error: 'Erro ao buscar personagem por ID.' });
+  }
+};
+
+export const getCharacterByName = async (req: Request, res: Response) => {
+  const { name } = req.query;
+
+  try {
+    if (!name) {
+      return res.status(400).json({ message: 'O nome do personagem é obrigatório.' });
+    }
+
+    const character = await prisma.personagens.findFirst({
+      where: { nome: { equals: String(name), mode: 'insensitive' } },
+    });
+
+    if (!character) {
+      return res.status(404).json({ message: 'Personagem não encontrado.' });
+    }
+
+    return res.status(200).json(character);
+  } catch (error) {
+    console.error('Erro ao buscar personagem por nome:', error);
+    return res.status(500).json({ error: 'Erro ao buscar personagem por nome.' });
   }
 };
 

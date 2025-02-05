@@ -1,6 +1,7 @@
 import express from 'express';
 import {
-  getCharacter,
+  getCharacterById,
+  getCharacterByName,
   uploadCharacter,
   deleteCharacter,
   updateCharacter,
@@ -10,8 +11,9 @@ import { prisma } from '../utils/prismaClient';
 
 const router = express.Router();
 
-router.get('/character/', getCharacter);
-router.get('/character/all', getAllCharacters);
+router.get('/character/:id', getCharacterById);
+router.get('/character', getCharacterByName);
+router.get('/character-all/', getAllCharacters);
 router.post('/character', uploadCharacter);
 router.delete('/character/:id', deleteCharacter);
 router.put('/character/:id', updateCharacter);
