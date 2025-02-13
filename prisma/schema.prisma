@@ -64,8 +64,3 @@ model Datas {
   modoJogo     ModosJogo   @relation(fields: [idModoJogo], references: [idModo])
   personagem   Personagens @relation(fields: [idPersonagem], references: [idPersonagem])
 }
-
-generator client {
-  provider = "prisma-client-js"
-  seed = "prisma/seed.ts"
-}

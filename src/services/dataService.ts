@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../utils/prismaClient';
 
-const personagemFoiSorteadoRecentemente = async (idPersonagem: number, idModoJogo: number): Promise<boolean> => {
+export const personagemFoiSorteadoRecentemente = async (idPersonagem: number, idModoJogo: number): Promise<boolean> => {
   const trintaDiasAtras = new Date();
   trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
 

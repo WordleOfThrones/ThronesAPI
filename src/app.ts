@@ -6,6 +6,7 @@ import userRoutes from './routes/user';
 import characterRoutes from './routes/character'; 
 import gameRoutes from './routes/game';
 import { inserirRegistrosDiarios } from './services/dataService'; 
+import testRoutes from './routes/test';
 
 dotenv.config(); 
 
@@ -49,6 +50,7 @@ app.get('/api/test-inserir', async (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/characters', characterRoutes);
 app.use('/api/games', gameRoutes); 
+app.use(testRoutes);
 
 app.get('/api', (req, res) => {
   res.send('API funcionando');
