@@ -47,9 +47,9 @@ app.get('/api/test-inserir', async (req, res) => {
   }
 });
 
-app.use('/api/users', userRoutes);
-app.use('/api/characters', characterRoutes);
-app.use('/api/games', gameRoutes); 
+app.use('/api', userRoutes);
+app.use('/api', characterRoutes);
+app.use('/api', gameRoutes); 
 app.use(testRoutes);
 
 app.get('/api', (req, res) => {
