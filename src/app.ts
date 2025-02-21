@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import cron from 'node-cron';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user';
 import characterRoutes from './routes/character'; 
 import gameRoutes from './routes/game';
@@ -12,6 +13,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 const allowedOrigins = [
   'https://wordleofthrones.vercel.app', 

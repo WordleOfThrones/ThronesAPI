@@ -23,18 +23,28 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { userId: user.userId, email: user.email, isAdmin: user.isAdmin },
       process.env.JWT_SECRET!,
-      { expiresIn: '1h' }
+      { expiresIn: '2h' }
     );
 
-    res.status(200).json({
-      message: 'Login realizado com sucesso!',
-      token,
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 2 * 60 * 60 * 1000, // Expira em 2 horas
     });
+
+    return res.json({ message: "Login bem-sucedido!" });
+
   } catch (error) {
     console.error('Erro ao fazer login:', error);
     res.status(500).json({ message: 'Erro ao fazer login', error });
   }
 };
+
+export const logoutUser = async (req: Request, res: Response) => {
+  res.clearCookie('token', {httpOnly: true, secure: process.env.NODE_ENV === 'production'});
+  res.json({message: "Logout realizado com sucesso!"});
+}
 
 export const registerUser = async (req: Request, res: Response) => {
   const { nameUser, nickname, email, password } = req.body;
