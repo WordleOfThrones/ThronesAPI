@@ -34,18 +34,18 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   console.log("Executando inserção diária de personagens...");
 
-/*   try {
+  try {
     await inserirRegistrosDiarios();
     console.log("Inserção diária concluída!");
   } catch (error) {
     console.error("Erro ao executar inserção diária:", error);
-  } */
+  }
 });
 
-app.get('/api/test-inserir', async (req, res) => {
+/* app.get('/api/inserir-registros', async (req, res) => {
   try {
     await inserirRegistrosDiarios();
     res.status(200).send('Inserção de personagens feita com sucesso!');
@@ -53,7 +53,7 @@ app.get('/api/test-inserir', async (req, res) => {
     console.error('Erro ao inserir personagens:', error);
     res.status(500).send('Erro ao inserir personagens.');
   }
-});
+}); */
 
 app.use('/api', userRoutes);
 app.use('/api', characterRoutes);
@@ -62,6 +62,10 @@ app.use(testRoutes);
 
 app.get('/api', (req, res) => {
   res.send('API funcionando');
+});
+
+app.get('/api/wake-up', (req, res) => {
+  res.send('Mantendo a API acordada!');
 });
 
 const PORT = process.env.PORT || 3300;

@@ -85,9 +85,6 @@ export const getSortedCharacter = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    console.log("idModoJogo recebido:", id);
-    console.log("idModoJogo convertido:", Number(id));
-
     if (!id || isNaN(Number(id))) {
       return res.status(400).json({ error: 'O parâmetro idModoJogo deve ser um número válido.' });
     }
