@@ -33,7 +33,20 @@ export const loginUser = async (req: Request, res: Response) => {
       maxAge: 2 * 60 * 60 * 1000, // Expira em 2 horas
     });
 
-    return res.json({ message: "Login bem-sucedido!" });
+    const updateLogin = await prisma.usuarios.update({
+      where: { userId: user.userId },
+      data: {
+        lastLogin: new Date(),
+      },
+    });
+
+    return res.json({ message: "Login bem-sucedido!", 
+    user: { 
+      id: user.userId, 
+      nameUser: user.nameUser, 
+      email: user.email, 
+      lastLogin: updateLogin.lastLogin},
+     });
 
   } catch (error) {
     console.error('Erro ao fazer login:', error);
