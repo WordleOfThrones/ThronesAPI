@@ -37,17 +37,21 @@ export const inserirRegistrosDiarios = async () => {
       let personagemAleatorio;
       let tentativa = 0;
       let personagemSorteado = false;
+      let listaTentativas: number[] = [];
 
-      while (!personagemSorteado && tentativa < 10) {
+      while (!personagemSorteado && tentativa < 32) {
         const randomIndex = Math.floor(Math.random() * personagens.length);
-        personagemAleatorio = personagens[randomIndex];
+        if(!listaTentativas.find((item) => item === randomIndex)){
+          listaTentativas.push(randomIndex);
+          personagemAleatorio = personagens[randomIndex];
 
-        const foiSorteado = await personagemFoiSorteadoRecentemente(personagemAleatorio.idPersonagem, modo.idModo);
+          const foiSorteado = await personagemFoiSorteadoRecentemente(personagemAleatorio.idPersonagem, modo.idModo);
 
-        if (!foiSorteado) {
-          personagemSorteado = true;
-        } else {
-          tentativa++;
+          if (!foiSorteado) {
+            personagemSorteado = true;
+          } else {
+            tentativa++;
+          }
         }
       }
 
@@ -56,10 +60,13 @@ export const inserirRegistrosDiarios = async () => {
         continue;
       }
 
+      const dataAtual = new Date();
+      dataAtual.setHours(0, 0, 0, 0);
+
       const novoRegistro: Prisma.DatasUncheckedCreateInput = {
         idPersonagem: personagemAleatorio.idPersonagem,
         idModoJogo: modo.idModo,
-        data: new Date(), // Data atual
+        data: dataAtual, // Data atual
       };
 
       await prisma.datas.create({

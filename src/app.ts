@@ -34,9 +34,15 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-cron.schedule('0 0 * * *', () => {
-  console.log('Executando inserção diária de personagens.');
-  inserirRegistrosDiarios();
+cron.schedule("* * * * *", async () => {
+  console.log("Executando inserção diária de personagens...");
+
+/*   try {
+    await inserirRegistrosDiarios();
+    console.log("Inserção diária concluída!");
+  } catch (error) {
+    console.error("Erro ao executar inserção diária:", error);
+  } */
 });
 
 app.get('/api/test-inserir', async (req, res) => {
