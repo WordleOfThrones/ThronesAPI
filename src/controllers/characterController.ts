@@ -81,6 +81,58 @@ export const getCharacterByName = async (req: Request, res: Response) => {
   }
 };
 
+export const getSortedCharacter = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    console.log("idModoJogo recebido:", id);
+    console.log("idModoJogo convertido:", Number(id));
+
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ error: 'O parâmetro idModoJogo deve ser um número válido.' });
+    }
+
+    const dataAtual = new Date();
+    dataAtual.setHours(0, 0, 0, 0);
+
+    console.log('Data Atual:', dataAtual);
+
+    const sorteio = await prisma.datas.findFirst({
+      where: {
+        idModoJogo: Number(id),
+        data: dataAtual,
+      },
+      include: {
+        personagem: true,
+      },
+    });
+
+    console.log('Sorteio encontrado:', sorteio);
+
+    if (!sorteio || !sorteio.personagem) {
+      return res.status(404).json({ error: 'Nenhum personagem sorteado encontrado para este modo de jogo e data.' });
+    }
+
+    const personagemSorteado = {
+      nome: sorteio.personagem.nome,
+      genero: sorteio.personagem.genero,
+      titulo: sorteio.personagem.titulo,
+      casa: sorteio.personagem.casa,
+      raca: sorteio.personagem.raca,
+      origem: sorteio.personagem.origem,
+      religiao: sorteio.personagem.religiao,
+      serie: sorteio.personagem.serie,
+      primeiraAparicao: sorteio.personagem.primeiraAparicao,
+      imagem: sorteio.personagem.imagem,
+    };
+
+    res.status(200).json(personagemSorteado);
+  } catch (error) {
+    console.error('Erro ao buscar personagem sorteado:', error);
+    res.status(500).json({ error: 'Erro ao buscar personagem sorteado.' });
+  }
+};
+
 export const getAllCharacters = async (req: Request, res: Response) => {
   try {
     const characters = await prisma.personagens.findMany({
