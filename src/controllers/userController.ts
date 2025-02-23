@@ -29,7 +29,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 2 * 60 * 60 * 1000, // Expira em 2 horas
     });
 
