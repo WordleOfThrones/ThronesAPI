@@ -63,4 +63,5 @@ model Datas {
   data         DateTime    @db.Date
   modoJogo     ModosJogo   @relation(fields: [idModoJogo], references: [idModo])
   personagem   Personagens @relation(fields: [idPersonagem], references: [idPersonagem])
+   @@unique([idModoJogo, data], name: "dataIdentifier")
 }

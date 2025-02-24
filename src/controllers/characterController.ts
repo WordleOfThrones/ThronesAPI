@@ -112,6 +112,7 @@ export const getSortedCharacter = async (req: Request, res: Response) => {
 
     const personagemSorteado = {
       nome: sorteio.personagem.nome,
+      descricao: sorteio.personagem.descricao,
       genero: sorteio.personagem.genero,
       titulo: sorteio.personagem.titulo,
       casa: sorteio.personagem.casa,
