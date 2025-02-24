@@ -34,7 +34,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("10 * * * *", async () => {
   console.log("Executando inserção diária de personagens...");
 
   try {
@@ -45,7 +45,7 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
-/* app.get('/api/inserir-registros', async (req, res) => {
+app.get('/api/inserir-registros', async (req, res) => {
   try {
     await inserirRegistrosDiarios();
     res.status(200).send('Inserção de personagens feita com sucesso!');
@@ -53,7 +53,7 @@ cron.schedule("0 0 * * *", async () => {
     console.error('Erro ao inserir personagens:', error);
     res.status(500).send('Erro ao inserir personagens.');
   }
-}); */
+});
 
 app.use('/api', userRoutes);
 app.use('/api', characterRoutes);
