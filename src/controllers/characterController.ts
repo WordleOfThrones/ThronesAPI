@@ -84,20 +84,32 @@ export const getCharacterByName = async (req: Request, res: Response) => {
 export const getSortedCharacter = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const { data } = req.query;
 
     if (!id || isNaN(Number(id))) {
       return res.status(400).json({ error: 'O parâmetro idModoJogo deve ser um número válido.' });
     }
+    
+    let dataSorteio: Date;
+    
+    if (data) {
+      const dataRecebida = new Date(data as string);
+      if (isNaN(dataRecebida.getTime())) {
+        return res.status(400).json({ error: "Formato de data inválido. Use YYYY-MM-DD." });
+      }
+      dataSorteio = dataRecebida;
+    } else {
+      dataSorteio = new Date();
+    }    
+    
+    dataSorteio.setHours(0, 0, 0, 0);
 
-    const dataAtual = new Date();
-    dataAtual.setHours(0, 0, 0, 0);
-
-    console.log('Data Atual:', dataAtual);
+    console.log('Data de sorteio:', dataSorteio.toLocaleDateString("pt-BR"));
 
     const sorteio = await prisma.datas.findFirst({
       where: {
         idModoJogo: Number(id),
-        data: dataAtual,
+        data: dataSorteio,
       },
       include: {
         personagem: true,
