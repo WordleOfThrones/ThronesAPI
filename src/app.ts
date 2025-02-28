@@ -34,7 +34,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("5 0 * * *", async () => {
   console.log("Executando inserção diária de personagens...");
 
   try {
