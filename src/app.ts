@@ -3,6 +3,7 @@ import express from 'express';
 import cron from 'node-cron';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import { setupSwagger } from "./utils/swaggerConfig";
 import userRoutes from './routes/user';
 import characterRoutes from './routes/character'; 
 import gameRoutes from './routes/game';
@@ -33,6 +34,8 @@ app.use(cors({
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+setupSwagger(app);
 
 cron.schedule("5 0 * * *", async () => {
   console.log("Executando inserção diária de personagens...");
