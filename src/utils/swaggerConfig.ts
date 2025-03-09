@@ -21,11 +21,13 @@ const options: swaggerJsdoc.Options = {
       },
     ],
   },
-  apis: ["../routes/*.ts"],
+  apis: ["./src/docs/*.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
+console.log("Rotas carregadas pelo Swagger:", (swaggerSpec as any).paths); // Debug das rotas
 
 export const setupSwagger = (app: Express) => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  console.log("📄 Swagger disponível em: http://localhost:3300/api-docs");
 };
