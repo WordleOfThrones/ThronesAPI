@@ -1,6 +1,7 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { Express } from "express";
+import { getThemeSync } from '@intelika/swagger-theme';
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -25,9 +26,11 @@ const options: swaggerJsdoc.Options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
-console.log("Rotas carregadas pelo Swagger:", (swaggerSpec as any).paths); // Debug das rotas
+console.log("Rotas carregadas pelo Swagger:", (swaggerSpec as any).paths);
 
 export const setupSwagger = (app: Express) => {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+        customCss: getThemeSync().toString()
+      }));
   console.log("📄 Swagger disponível em: http://localhost:3300/api-docs");
 };
