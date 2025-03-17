@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/app.ts",
-    "build": "tsc",
+    "build": "tsc && prisma migrate deploy && prisma generate",
     "start": "node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
