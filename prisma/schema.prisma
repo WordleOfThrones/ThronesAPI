@@ -38,7 +38,7 @@ model Personagens {
 
 model Jogos {
   idJogo        Int       @id @default(autoincrement())
-  idUser        Int
+  idUser        Int?
   qtdTentativas Int
   tempo         Int
   status        Int       @default(0)
@@ -46,7 +46,8 @@ model Jogos {
   data          DateTime
   idModoJogo    Int
   modoJogo      ModosJogo @relation(fields: [idModoJogo], references: [idModo])
-  usuario       Usuarios  @relation(fields: [idUser], references: [userId])
+  usuario       Usuarios?  @relation(fields: [idUser], references: [userId])
+  @@unique([idUser, data, idModoJogo], name: "jogoIdentifier")
 }
 
 model ModosJogo {
