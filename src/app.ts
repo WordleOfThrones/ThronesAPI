@@ -4,11 +4,11 @@ import cron from 'node-cron';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { setupSwagger } from "./utils/swaggerConfig";
-import userRoutes from './routes/user';
-import characterRoutes from './routes/character'; 
-import gameRoutes from './routes/game';
-import { inserirRegistrosDiarios } from './services/dataService'; 
-import testRoutes from './routes/test';
+import userRoutes from './routes/userRouter';
+import characterRoutes from './routes/characterRouter'; 
+import gameRoutes from './routes/gameRouter';
+import { inserirRegistrosDiarios } from './services/dateService'; 
+import testRoutes from './routes/testRouter';
 
 dotenv.config(); 
 

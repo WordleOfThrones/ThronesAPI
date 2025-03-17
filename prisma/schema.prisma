@@ -42,7 +42,7 @@ model Jogos {
   qtdTentativas Int
   tempo         Int
   status        Int       @default(0)
-  pontuacaoDia  Decimal   @db.Decimal(10, 2)
+  pontuacao     Decimal   @db.Decimal(10, 2)
   data          DateTime
   idModoJogo    Int
   modoJogo      ModosJogo @relation(fields: [idModoJogo], references: [idModo])
