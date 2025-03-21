@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../utils/prismaClient';
+import { verificarEAtualizarRecorde } from '../services/gameService';
 
 export const createOrUpdateGame = async (req: Request, res: Response) => {
     try {
@@ -36,7 +37,11 @@ export const createOrUpdateGame = async (req: Request, res: Response) => {
             data: dataAtual,
           },
         });
-  
+
+        if (status === 1) {
+          verificarEAtualizarRecorde(idUser, dataAtual.toISOString().split('T')[0]);
+        }
+
         return res.status(201).json({
           message: "Jogo criado com sucesso!",
           jogo: novoJogo,
@@ -52,31 +57,36 @@ export const getUserScoreByDate = async (req: Request, res: Response) => {
     try {
       const { idUser } = req.params;
       const { data, idModoJogo } = req.query;
-  
+
       if (!idUser || isNaN(Number(idUser))) {
         return res.status(400).json({ error: "O parâmetro idUser deve ser um número válido." });
-      };
-  
+      }
+
       const dataConsulta = data ? new Date(data as string) : new Date();
-      dataConsulta.setHours(0, 0, 0, 0);
-  
+      const dataFormatada = dataConsulta.toISOString().split('T')[0];
+
+      console.log(`Consultando pontuação de idUser=${idUser} para a data=${dataFormatada}`);
+
       const jogosUsuario = await prisma.jogos.findMany({
         where: {
           idUser: Number(idUser),
-          data: dataConsulta,
+          data: {
+            gte: new Date(`${dataFormatada}T00:00:00.000Z`),
+            lt: new Date(`${dataFormatada}T23:59:59.999Z`),
+          },
           ...(idModoJogo && { idModoJogo: Number(idModoJogo) })
         },
         include: {
           modoJogo: true,
         },
       });
-  
+
       if (!jogosUsuario || jogosUsuario.length === 0) {
         return res.status(404).json({ error: "Nenhum jogo encontrado para esse usuário nesta data/modo." });
-      };
-  
+      }
+
       const pontuacaoTotal = jogosUsuario.reduce((total, jogo) => total + Number(jogo.pontuacao), 0);
-  
+
       const pontuacaoPorJogo = jogosUsuario.map((jogo) => ({
         modoJogo: jogo.modoJogo.nomeModo,
         pontuacao: jogo.pontuacao,
@@ -84,15 +94,19 @@ export const getUserScoreByDate = async (req: Request, res: Response) => {
         tempo: jogo.tempo,
         status: jogo.status,
       }));
-  
+
       res.status(200).json({
-        data: dataConsulta.toISOString().split('T')[0],
+        data: dataFormatada,
         pontuacaoTotal,
         jogos: pontuacaoPorJogo,
       });
-  
+
     } catch (error) {
       console.error('Erro ao buscar pontuação do usuário:', error);
       res.status(500).json({ error: "Erro ao buscar pontuação do usuário." });
     }
+};
+
+export const getUserRecords = async (req: Request, res: Response) => {
+//A fazer
 };

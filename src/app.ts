@@ -23,13 +23,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  },
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -71,7 +65,7 @@ app.get('/api/wake-up', (req, res) => {
   res.send('Mantendo a API acordada!');
 });
 
-const PORT = process.env.PORT || 3300;
+const PORT = process.env.PORT || 3400;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
