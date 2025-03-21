@@ -26,10 +26,19 @@ export const loginUser = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    res.cookie("token", token, {
+
+    // Para rodar em produção
+    /* res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
+      maxAge: 2 * 60 * 60 * 1000, // Expira em 2 horas
+    }); */
+
+    // Para rodar em desenvolvimento
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
       maxAge: 2 * 60 * 60 * 1000, // Expira em 2 horas
     });
 
