@@ -14,25 +14,21 @@ dotenv.config();
 
 const app = express();
 
-const isProduction = process.env.NODE_ENV === "production";
-const allowedOrigins = isProduction
-  ? ["https://wordleofthrones.vercel.app"] 
-  : ["http://localhost:3000"]; 
-
-
 app.use(
   cors({
-    origin: allowedOrigins, 
-    credentials: true, 
-    methods: ["GET", "POST", "PUT", "DELETE"], 
-    allowedHeaders: ["Content-Type", "Authorization"], 
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      return callback(null, true);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 app.use(express.json()); 
 app.use(cookieParser()); 
 
-console.log("🌍 Origens permitidas pelo CORS:", allowedOrigins);
 
 setupSwagger(app);
 
