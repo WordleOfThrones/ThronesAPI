@@ -9,13 +9,15 @@ export const createOrUpdateGame = async (req: Request, res: Response) => {
       const dataAtual = new Date();
       dataAtual.setHours(0, 0, 0, 0);
   
-      const whereCondition = idUser
-        ? { idUser, data: dataAtual, idModoJogo }
-        : { idUser: null, data: dataAtual, idModoJogo };
+      const jogoExistente = await prisma.jogos.findFirst({ 
+        where: { 
+          idUser, 
+          data: dataAtual, 
+          idModoJogo 
+        } 
+      });
   
-      const jogoExistente = await prisma.jogos.findFirst({ where: whereCondition });
-  
-      if (jogoExistente) {
+      if (jogoExistente && idUser != null) {
         const jogoAtualizado = await prisma.jogos.update({
           where: { idJogo: jogoExistente.idJogo },
           data: { qtdTentativas, tempo, status, pontuacao },
