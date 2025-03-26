@@ -15,20 +15,25 @@ dotenv.config();
 
 const app = express();
 
+// Configuração estática: permite somente os domínios especificados.
+const allowedOrigins = [
+  "https://wordleofthrones.vercel.app",
+  "https://wordleofthrones-nn604k8ws-avelar-rodrigues-de-sousas-projects.vercel.app",
+  "http://localhost:3000"
+];
+
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      return callback(null, true);
-    },
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.use(express.json()); 
-app.use(cookieParser()); 
+app.use(express.json());
+app.use(cookieParser());
+
 
 
 setupSwagger(app);
