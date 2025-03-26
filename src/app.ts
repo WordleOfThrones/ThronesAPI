@@ -15,7 +15,6 @@ dotenv.config();
 
 const app = express();
 
-// Configuração estática: permite somente os domínios especificados.
 const allowedOrigins = [
   "https://wordleofthrones.vercel.app",
   "https://wordleofthrones-nn604k8ws-avelar-rodrigues-de-sousas-projects.vercel.app",
@@ -34,10 +33,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-
-
 setupSwagger(app);
-
 
 cron.schedule("5 0 * * *", async () => {
   console.log("Executando inserção diária de personagens...");
@@ -50,7 +46,6 @@ cron.schedule("5 0 * * *", async () => {
   }
 });
 
-
 app.get("/api/inserir-registros", async (req, res) => {
   try {
     await inserirRegistrosDiarios();
@@ -61,13 +56,11 @@ app.get("/api/inserir-registros", async (req, res) => {
   }
 });
 
-
 app.use("/api", userRoutes);
 app.use("/api", characterRoutes);
 app.use("/api", gameRoutes);
 app.use("/api", dateRoutes);
 app.use(testRoutes);
-
 
 app.get("/api", (req, res) => {
   res.send("API funcionando");
@@ -76,7 +69,6 @@ app.get("/api", (req, res) => {
 app.get("/api/wake-up", (req, res) => {
   res.send("Mantendo a API acordada!");
 });
-
 
 const PORT = process.env.PORT || 3400;
 app.listen(PORT, () => {
