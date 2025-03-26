@@ -7,6 +7,7 @@ import { setupSwagger } from "./utils/swaggerConfig";
 import userRoutes from "./routes/userRouter";
 import characterRoutes from "./routes/characterRouter";
 import gameRoutes from "./routes/gameRouter";
+import dateRoutes from "./routes/dateRouter";
 import { inserirRegistrosDiarios } from "./services/dateService";
 import testRoutes from "./routes/testRouter";
 
@@ -59,6 +60,7 @@ app.get("/api/inserir-registros", async (req, res) => {
 app.use("/api", userRoutes);
 app.use("/api", characterRoutes);
 app.use("/api", gameRoutes);
+app.use("/api", dateRoutes);
 app.use(testRoutes);
 
 

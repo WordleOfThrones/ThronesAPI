@@ -31,7 +31,6 @@ export const verificarEAtualizarRecorde = async (idUser: number, data: string) =
   
       console.log(`Recorde atual do usuário ${idUser}: ${usuario.recorde}`);
   
-      // Se a nova pontuação for maior que o recorde atual, atualizar
       if (pontuacaoTotal > (usuario.recorde ?? 0)) {
         await prisma.usuarios.update({
           where: { userId: idUser },
