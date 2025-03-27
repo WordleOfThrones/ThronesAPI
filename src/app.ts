@@ -19,8 +19,7 @@ const allowedOrigins = [
   "https://wordleofthrones.vercel.app",
   "https://wordleofthrones-nn604k8ws-avelar-rodrigues-de-sousas-projects.vercel.app",
   "http://localhost:3000",
-  "https://wordle-of-thrones-4iwq.vercel.app",
-
+  "https://wordle-of-thrones-projeto.vercel.app"
 ];
 
 app.use(
