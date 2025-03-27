@@ -22,6 +22,7 @@ const allowedOrigins = [
   "https://wordle-of-thrones-projeto.vercel.app",
   "https://wordle-of-thrones-4iwq-git-feature-carls-projects-c602a40b.vercel.app",
   "https://wordle-of-thrones-qdyvs6by3-carls-projects-c602a40b.vercel.app",
+  "https://wordle-of-thrones-4iwq.vercel.app"
 ];
 
 app.use(
