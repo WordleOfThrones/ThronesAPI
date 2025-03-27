@@ -55,6 +55,50 @@ export const createOrUpdateGame = async (req: Request, res: Response) => {
     }
 }
 
+export const getJogosRegistrados = async (req: Request, res: Response) => {
+  try {
+    const { data, idModoJogo } = req.query;
+
+    const filtros: any = {
+      status: 1,
+    };
+
+    if (data) {
+      const dataConsulta = data ? new Date(data as string) : new Date();
+      const dataFormatada = dataConsulta.toISOString().split('T')[0];
+
+      filtros.data = {
+        gte: new Date(`${dataFormatada}T00:00:00.000Z`),
+        lt: new Date(`${dataFormatada}T23:59:59.999Z`)
+      };
+    }
+
+    if (idModoJogo) {
+      filtros.idModoJogo = Number(idModoJogo);
+    }
+
+    const jogos = await prisma.jogos.findMany({
+      where: filtros,
+      include: {
+        modoJogo: true,
+        usuario: {
+          select: {
+            nameUser: true,
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      total: jogos.length,
+      registros: jogos,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar jogos registrados:", error);
+    res.status(500).json({ error: "Erro ao buscar registros de jogos." });
+  }
+};
+
 export const getUserScoreByDate = async (req: Request, res: Response) => {
     try {
       const { idUser } = req.params;

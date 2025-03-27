@@ -7,7 +7,81 @@
 
 /**
  * @swagger
- * /game/:
+ * /game:
+ *   get:
+ *     summary: Retorna os jogos registrados na data e/ou modo de jogo especificados
+ *     description: |
+ *       Retorna a lista de jogos registrados com `status = 1`.  
+ *       Permite filtrar por data (query param `data`) e por ID do modo de jogo (`idModoJogo`).
+ *       Se nenhum filtro for passado, retorna todos os jogos com status ativo.
+ *     tags: [Jogos]
+ *     parameters:
+ *       - in: query
+ *         name: data
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: false
+ *         description: Data dos jogos no formato YYYY-MM-DD
+ *       - in: query
+ *         name: idModoJogo
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: ID do modo de jogo (1 = clássico, 2 = descrição, 3 = imagem)
+ *     responses:
+ *       200:
+ *         description: Lista de jogos encontrados com base nos filtros
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                   description: Total de registros encontrados
+ *                 registros:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       idJogo:
+ *                         type: integer
+ *                       idUser:
+ *                         type: integer
+ *                         nullable: true
+ *                       qtdTentativas:
+ *                         type: integer
+ *                       tempo:
+ *                         type: integer
+ *                       status:
+ *                         type: integer
+ *                       pontuacao:
+ *                         type: string
+ *                       data:
+ *                         type: string
+ *                         format: date-time
+ *                       idModoJogo:
+ *                         type: integer
+ *                       modoJogo:
+ *                         type: object
+ *                         properties:
+ *                           nomeModo:
+ *                             type: string
+ *                       usuario:
+ *                         type: object
+ *                         nullable: true
+ *                         properties:
+ *                           nome:
+ *                             type: string
+ *       400:
+ *         description: Parâmetros inválidos
+ *       500:
+ *         description: Erro interno ao buscar os jogos
+ */
+/**
+ * @swagger
+ * /game:
  *   post:
  *     summary: Cria ou atualiza um jogo
  *     description: Registra um jogo novo ou atualiza um existente para um usuário, permitindo jogos anônimos.
